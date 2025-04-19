@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit New Product</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5e6d3;
+            color: #5a3e2b;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .image-section,
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .image-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            background-color: #5a3e2b;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            margin: auto;
+        }
+
+        .submit-btn:hover {
+            background-color: #4a3323;
+        }
+
+        ul {
+            padding-left: 0;
+            list-style-type: none;
+        }
+
+        li.success {
+            color: green;
+        }
+
+        li.error {
+            color: red;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .submit-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Image Section -->
+    <div class="image-section">
+        <img src="{% static 'images/submit.png' %}" alt="Living room setup with sofa and lamps">
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-section">
+        <h2>Submit New Product</h2>
+
+        <!-- Django Flash Messages -->
+        {% if messages %}
+            <ul>
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <!-- Product Submission Form -->
+        <form action="{% url 'seller' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="seller_id">Seller ID:</label>
+                <input type="number" id="seller_id" name="seller_id" required>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Product Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Price (in USD):</label>
+                <input type="number" id="price" name="price" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <label for="stock">Stock Quantity:</label>
+                <input type="number" id="stock" name="stock" required>
+            </div>
+
+            <div class="form-group">
+                <label for="image_url">Product Image URL:</label>
+                <input type="text" id="image_url" name="image_url">
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    <option value="">-- Select a Category --</option>
+                    <option value="desks">Desks</option>
+                    <option value="office-chairs"> Office Chairs</option>
+                    <option value="coffee-tables">Coffee Tables</option>
+                    <option value="sofa-couches">Sofa and Couches</option>
+                    <option value="bookshelves">Bookshelves</option>
+                    <option value="side tables">Side Tables</option>
+                    <option value="dining tables">Dining Tables</option>
+                    <option value="buffets">Buffets and Sideboards</option>
+                    <option value="bar carts">Bar Carts</option>
+                    <option value="dinning-chairs">Dinning Chairs</option>
+                    <option value="file cabinets">File Cabinets</option>
+                    <option value="cubicles">Cubicles</option>
+                    <option value="paintings">Paintings</option>
+                    <option value="wall clocks">Wall Clocks</option>
+                    <option value="doormats">Doormats</option>
+                    <option value="fairy lights">Fairy Lights</option>
+                    <option value="others">Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <button class="submit-btn" type="submit">Submit Product</button>
+            </div>
+            <div class="form-group">
+                <a href="{% url 'rent:rent_view' %}" class="submit-btn" style="text-align:center; display:block;">Rent</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

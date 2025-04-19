@@ -1,0 +1,429 @@
+{% extends 'homepage.html' %}
+{% block title  %}
+    <title>
+        Products
+    </title>
+{% endblock %}
+{% block style %}
+<style>
+   body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f6dccd;
+    color: #5a3e2b;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(rgba(245, 230, 211, 0.95), rgba(245, 230, 211, 0.95)),
+                        url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+            background-size: cover;
+}
+
+.container {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    max-width: 1400px;
+    margin: 40px auto;
+}
+.container>h1{
+    text-align: center;
+}
+
+.sidebar {
+    position: sticky;
+    top: 20px;
+    width: 280px;
+    background-color: #f2e1d9;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    height: calc(100vh - 40px);
+    overflow-y: auto;
+    left: 0;
+}
+
+.sidebar h1 {
+    font-size: 22px;
+    color: #5a3e2b;
+    margin-bottom: 15px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: #7b5a44;
+    transition: color 0.3s;
+    display: block;
+    padding: 8px 0;
+}
+
+.sidebar ul li a:hover, .sidebar ul li a.active {
+    color: #f77e32;
+    font-weight: bold;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    justify-items: start;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+.content h1 {
+    text-align: center;
+    font-size: 40px;
+    margin-bottom: 30px;
+}
+
+.product-card {
+    background: #fffaf3;
+    border: 1px solid #e1cbb3;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(90, 62, 43, 0.1);
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: auto;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(90, 62, 43, 0.2);
+}
+
+.product-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.product-card h3 {
+    margin: 10px 0 5px;
+    color: #5a3e2b;
+    font-size: 20px;
+}
+
+.product-card p {
+    color: #7b5a44;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.product-card p.price {
+    font-weight: bold;
+    color: #5a3e2b;
+    font-size: 18px;
+}
+
+.product-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.btn {
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-buy {
+    background-color: #b29986;
+    color: white;
+}
+
+.btn-buy:hover {
+    background-color: #9a8270;
+}
+
+.wishlist-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wishlist-btn i {
+    font-size: 20px;
+    color: #e1cbb3;
+    transition: all 0.3s ease;
+}
+
+.wishlist-btn:hover i {
+    transform: scale(1.1);
+}
+
+.wishlist-btn.active i {
+    color: #f77e32;
+}
+
+.wishlist-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.wishlist-btn:disabled i {
+    color: #ccc;
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h1 class="text-2xl font-bold mb-4">Living Room Furniture</h1>
+        <ul class="space-y-2 mb-8">
+            <li class="text-lg"><a href="{% url 'category' 'coffee-tables'%}">Coffee Tables</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'sofa-couches'%}">Sofa and Couches</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'bookshelves'%}">Bookshelves</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'side tables'%}">Side Tables</a></li>
+        </ul>
+        <hr class="mb-6">
+        <h1 class="text-2xl font-bold mb-4">Dining Room Furniture</h1>
+        <ul class="space-y-2 mb-8">
+            <li class="text-lg"><a href="{% url 'category' 'dining tables'%}">Dining Tables</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'dining chairs'%}">Dining Chairs</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'buffets and sideboards'%}">Buffets and Sideboards</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'bar carts'%}">Bar Carts</a></li>
+        </ul>
+        <hr class="mb-6">
+        <h1 class="text-2xl font-bold mb-4">Office Furniture</h1>
+        <ul class="space-y-2 mb-8">
+            <li class="text-lg"><a href="{% url 'category' 'desks'%}">Desks</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'office-chairs'%}">Office Chairs</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'file cabinets'%}">File Cabinets</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'cubicles'%}">Cubicles</a></li>
+        </ul>
+        <hr class="mb-6">
+        <h1 class="text-2xl  mb-3">Home Decor</h1>
+        <ul class="space-y-2 mb-8">
+            <li class="text-lg"><a href="{% url 'category' 'paintings'%}">Paintings</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'wall clocks'%}">Wall Clocks</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'doormats'%}">Doormats</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'fairy lights'%}">Fairy Lights</a></li>
+            <li class="text-lg"><a href="{% url 'category' 'others'%}">Others</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1>{{ category }}</h1>
+
+        <div class="product-list">
+            {% for product in products %}
+                <div class="product-card">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <p class="price">${{ product.price }}</p>
+                    <p>{{ product.description }}</p>
+                    <div class="product-actions">
+                        <form action="{% url 'add_to_cart' product.id %}" method="POST" style="margin: 0;">
+                            {% csrf_token %}
+                            {% if user.role == 'seller' %}
+                                <button class="btn btn-buy" type="button" disabled title="Sellers can't buy products">
+                                    Add to Cart
+                                </button>
+                            {% else %}
+                                <button class="btn btn-buy" type="submit">
+                                    Add to Cart
+                                </button>
+                            {% endif %}
+                        </form>
+                        
+                        {% if user.is_authenticated and user.role != 'seller' %}
+                            <button class="wishlist-btn {% if product in user.wishlists.all %}active{% endif %}" 
+                                    onclick="toggleWishlist(this, '{{ product.id }}')"
+                                    data-product-id="{{ product.id }}"
+                                    title="{% if product in user.wishlists.all %}Remove from Wishlist{% else %}Add to Wishlist{% endif %}">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No products found in this category.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleWishlist(button, productId) {
+    const isActive = button.classList.contains('active');
+    const url = isActive ? `/remove_from_wishlist/${productId}/` : `/add_to_wishlist/${productId}/`;
+    
+    // Get CSRF token from the cookie
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json',
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Toggle active class
+            button.classList.toggle('active');
+            
+            // Update all heart buttons for this product
+            const allHeartButtons = document.querySelectorAll(`.wishlist-btn[data-product-id="${productId}"]`);
+            allHeartButtons.forEach(btn => {
+                btn.classList.toggle('active');
+                const heartIcon = btn.querySelector('i');
+                if (heartIcon) {
+                    heartIcon.style.color = isActive ? '#e1cbb3' : '#f77e32';
+                }
+            });
+            
+            // Update button title
+            button.title = isActive ? 'Add to Wishlist' : 'Remove from Wishlist';
+            
+            // Show success message
+            showMessage(data.message, 'success');
+        } else {
+            // Show error message
+            showMessage(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showMessage('An error occurred. Please try again.', 'error');
+    });
+}
+
+// Function to show popup messages
+function showMessage(message, type) {
+    // Create message element
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `popup-message ${type}`;
+    messageDiv.textContent = message;
+    
+    // Add styles for the popup
+    const style = document.createElement('style');
+    style.textContent = `
+        .popup-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.5s ease-out;
+        }
+        .popup-message.success {
+            background-color: #4CAF50;
+        }
+        .popup-message.error {
+            background-color: #f44336;
+        }
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Add message to the page
+    document.body.appendChild(messageDiv);
+    
+    // Remove message after 3 seconds
+    setTimeout(() => {
+        messageDiv.style.animation = 'slideOut 0.5s ease-in';
+        setTimeout(() => {
+            document.body.removeChild(messageDiv);
+        }, 500);
+    }, 3000);
+}
+
+// Add to cart functionality
+document.querySelectorAll('form[action*="add_to_cart"]').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showMessage(data.message, 'success');
+                // If the user wants to go to the cart, they can click the cart icon in the navbar
+                // We'll add a link to the cart in the success message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'popup-message success';
+                messageDiv.innerHTML = `${data.message} <a href="${data.redirect}" style="color: white; text-decoration: underline;">View Cart</a>`;
+                document.body.appendChild(messageDiv);
+                
+                // Remove message after 5 seconds
+                setTimeout(() => {
+                    messageDiv.style.animation = 'slideOut 0.5s ease-in';
+                    setTimeout(() => {
+                        document.body.removeChild(messageDiv);
+                    }, 500);
+                }, 5000);
+            } else {
+                showMessage(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showMessage('An error occurred. Please try again.', 'error');
+        });
+    });
+});
+</script>
+{% endblock %}

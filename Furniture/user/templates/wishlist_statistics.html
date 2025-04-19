@@ -1,0 +1,310 @@
+{% extends 'homepage.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Wishlist Statistics - FurniStyle</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    .stats-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .stats-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .stats-header h1 {
+        font-family: 'Playfair Display', serif;
+        color: #8b5e3c;
+        margin-bottom: 10px;
+    }
+    
+    .stats-header p {
+        color: #666;
+        font-size: 18px;
+    }
+    
+    .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .stats-table th {
+        background-color: #8b5e3c;
+        color: white;
+        padding: 15px;
+        text-align: left;
+    }
+    
+    .stats-table td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .stats-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .stats-table tr:hover {
+        background-color: #f9f9f9;
+    }
+    
+    .product-info {
+        display: flex;
+        align-items: center;
+    }
+    
+    .product-image {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-right: 15px;
+    }
+    
+    .product-name {
+        font-weight: 500;
+        color: #333;
+    }
+    
+    .product-category {
+        font-size: 14px;
+        color: #666;
+    }
+    
+    .wishlist-count {
+        font-weight: 700;
+        color: #8b5e3c;
+    }
+    
+    .wishlist-badge {
+        display: inline-block;
+        background-color: #f0e5d8;
+        color: #8b5e3c;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .no-data {
+        text-align: center;
+        padding: 50px;
+        color: #666;
+    }
+    
+    .no-data i {
+        font-size: 48px;
+        color: #ddd;
+        margin-bottom: 20px;
+    }
+    
+    .filter-container {
+        margin-bottom: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .filter-container select {
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: white;
+        min-width: 200px;
+    }
+    
+    .filter-container button {
+        background-color: #8b5e3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .filter-container button:hover {
+        background-color: #492e19;
+    }
+    
+    .chart-container {
+        margin-top: 40px;
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+    
+    .chart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .chart-title {
+        font-family: 'Playfair Display', serif;
+        color: #8b5e3c;
+    }
+    
+    .chart-legend {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .legend-item {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+    }
+    
+    .legend-color {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="stats-container">
+    <div class="stats-header">
+        <h1>Wishlist Statistics</h1>
+        <p>See which products are most popular among customers</p>
+    </div>
+    
+    <div class="filter-container">
+        <div>
+            <select id="categoryFilter">
+                <option value="">All Categories</option>
+                {% for category_value, category_name in categories %}
+                <option value="{{ category_value }}">{{ category_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button id="applyFilter">Apply Filter</button>
+    </div>
+    
+    {% if products_with_counts %}
+        <table class="stats-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Wishlist Count</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in products_with_counts %}
+                <tr>
+                    <td>
+                        <div class="product-info">
+                            {% if item.product.image_url %}
+                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="product-image">
+                            {% else %}
+                            <div class="product-image" style="background-color: #f0e5d8; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-image" style="color: #8b5e3c;"></i>
+                            </div>
+                            {% endif %}
+                            <div>
+                                <div class="product-name">{{ item.product.name }}</div>
+                                <div class="product-category">{{ item.product.get_category_display }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ item.product.get_category_display }}</td>
+                    <td>${{ item.product.price }}</td>
+                    <td>
+                        <span class="wishlist-badge">
+                            <i class="fas fa-heart"></i> {{ item.wishlist_count }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'product_detail' item.product.id %}" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3 class="chart-title">Top 5 Most Wishlisted Products</h3>
+                <div class="chart-legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: #8b5e3c;"></div>
+                        <span>Wishlist Count</span>
+                    </div>
+                </div>
+            </div>
+            <canvas id="wishlistChart"></canvas>
+        </div>
+    {% else %}
+        <div class="no-data">
+            <i class="fas fa-chart-bar"></i>
+            <h3>No wishlist data available</h3>
+            <p>There are no products in any user's wishlist yet.</p>
+        </div>
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Filter functionality
+        document.getElementById('applyFilter').addEventListener('click', function() {
+            const category = document.getElementById('categoryFilter').value;
+            window.location.href = `{% url 'wishlist_statistics' %}?category=${category}`;
+        });
+        
+        // Chart for top 5 wishlisted products
+        {% if products_with_counts %}
+            const topProducts = {{ products_with_counts|slice:":5"|safe }};
+            
+            const ctx = document.getElementById('wishlistChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: topProducts.map(item => item.product.name),
+                    datasets: [{
+                        label: 'Wishlist Count',
+                        data: topProducts.map(item => item.wishlist_count),
+                        backgroundColor: '#8b5e3c',
+                        borderColor: '#8b5e3c',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        {% endif %}
+    });
+</script>
+{% endblock %} 

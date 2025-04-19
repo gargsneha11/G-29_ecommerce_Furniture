@@ -1,0 +1,242 @@
+{% extends 'homepage.html' %}
+{% block title %}
+    <title>Your Cart</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f9f6f2;
+        color: #2f2f2f;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        text-align: center;
+        color: #3c2e2e;
+        font-size: 2.8rem;
+        margin: 40px 0 30px;
+    }
+
+    table {
+        width: 95%;
+        margin: 0 auto;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+        background-color: transparent;
+    }
+
+    thead {
+        background-color: #7b4f33;
+        color: #ffffff;
+        border-radius: 12px 12px 0 0;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    th {
+        padding: 16px;
+        font-size: 1rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    tbody tr {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    tbody tr td {
+        padding: 20px 16px;
+        vertical-align: middle;
+        text-align: center;
+        border-bottom: 1px solid #eee;
+    }
+
+    img {
+        max-width: 80px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .btn {
+        padding: 8px 14px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-increase {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-increase:hover {
+        background-color: #218838;
+    }
+
+    .btn-decrease {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .btn-decrease:hover {
+        background-color: #e0a800;
+    }
+
+    .btn-remove {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-remove:hover {
+        background-color: #bd2130;
+    }
+
+    .quantity-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .quantity-number {
+        font-size: 1.1rem;
+        font-weight: 500;
+        min-width: 24px;
+    }
+
+    .total {
+        text-align: right;
+        margin: 30px 5% 10px 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #3c2e2e;
+    }
+
+    .btn-pay {
+        background-color: #5c4033;
+        color: white;
+        padding: 16px 42px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 12px;
+        text-decoration: none;
+        display: block;
+        margin: 25px auto;
+        width: fit-content;
+        transition: background-color 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-pay:hover {
+        background-color: #3f2c22;
+    }
+
+    .back-link {
+        display: block;
+        text-align: center;
+        color: #5c4033;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        margin-bottom: 60px;
+    }
+
+    .back-link:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        th, td {
+            padding: 12px;
+            font-size: 0.9rem;
+        }
+
+        img {
+            max-width: 60px;
+        }
+
+        .btn-pay {
+            padding: 14px 30px;
+            font-size: 1rem;
+            width: 90%;
+        }
+
+        .total {
+            text-align: center;
+            margin-right: 0;
+            margin-bottom: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>Your Shopping Cart</h1>
+
+    {% if cart_items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Image</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                    <th>Remove</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product_id, item in cart_items.items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>
+                            {% if item.image_url %}
+                                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>${{ item.price }}</td>
+                        <td>
+                            <div class="quantity-controls">
+                                <form action="{% url 'update_quantity' product_id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="decrease">
+                                    <button type="submit" class="btn btn-decrease">−</button>
+                                </form>
+                                <span class="quantity-number">{{ item.quantity }}</span>
+                                <form action="{% url 'update_quantity' product_id %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="increase">
+                                    <button type="submit" class="btn btn-increase">+</button>
+                                </form>
+                            </div>
+                        </td>
+                        <td>${{ item.subtotal }}</td>
+                        <td>
+                            <form action="{% url 'remove_from_cart' product_id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-remove">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total">Total: ${{ total }}</div>
+
+        <a href="{% url 'checkout' %}" class="btn-pay">Proceed to Pay</a>
+        <a href="{% url 'all_products' %}" class="back-link">⬅ Continue Shopping</a>
+    {% else %}
+        <p style="text-align:center; font-size: 1.2rem; margin-top: 100px;">Your cart is empty.</p>
+    {% endif %}
+{% endblock %}

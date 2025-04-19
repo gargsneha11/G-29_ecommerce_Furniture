@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rentable Products</title>
+    <style>
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .card {
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            background-color: #f9f9f9;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        .card h3 {
+            margin: 10px 0;
+        }
+
+        .card p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .card .price {
+            font-weight: bold;
+            color: #5a3e2b;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Rentable Products</h2>
+
+    <div class="card-container">
+        {% for product in products %}
+            <div class="card">
+                <img src="{{ product.image_url }}" alt="{{ product.product_name }}">
+                <h3>{{ product.product_name }}</h3>
+                <p>Condition: {{ product.condition|capfirst }}</p>
+                <p class="price">Price per Day: ${{ product.price_per_day }}</p>
+            </div>
+        {% empty %}
+            <p>No rentable products available at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

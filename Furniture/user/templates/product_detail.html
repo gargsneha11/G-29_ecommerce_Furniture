@@ -1,0 +1,200 @@
+{% extends 'homepage.html' %}
+{% block title %}
+    <title>{{ product.name }} - Product Details</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f6dccd;
+        color: #5a3e2b;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(rgba(245, 230, 211, 0.95), rgba(245, 230, 211, 0.95)),
+                    url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+
+    .product-detail {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 40px;
+        background: #fffaf3;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(90, 62, 43, 0.1);
+        padding: 30px;
+    }
+
+    .product-image {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-info {
+        flex: 1;
+        min-width: 300px;
+    }
+
+    .product-info h1 {
+        color: #5a3e2b;
+        margin-bottom: 15px;
+        font-size: 2rem;
+    }
+
+    .product-info .price {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #5a3e2b;
+        margin-bottom: 20px;
+    }
+
+    .product-info .description {
+        color: #7b5a44;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .product-info .stock {
+        font-size: 1rem;
+        color: #7b5a44;
+        margin-bottom: 30px;
+    }
+
+    .actions {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+    }
+
+    .btn-add-cart {
+        background-color: #b29986;
+        color: white;
+    }
+
+    .btn-add-cart:hover {
+        background-color: #9a8270;
+    }
+
+    .btn-wishlist {
+        background-color: #e1cbb3;
+        color: #5a3e2b;
+    }
+
+    .btn-wishlist:hover {
+        background-color: #d0b8a0;
+    }
+
+    .btn-wishlist.active {
+        background-color: #f77e32;
+        color: white;
+    }
+
+    .messages {
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .alert-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 10px;
+        }
+        
+        .product-detail {
+            flex-direction: column;
+            padding: 20px;
+        }
+        
+        .actions {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <div class="product-detail">
+        <div class="product-image">
+            <img src="{{ product.image_url }}" alt="{{ product.name }}">
+        </div>
+        <div class="product-info">
+            <h1>{{ product.name }}</h1>
+            <p class="price">${{ product.price }}</p>
+            <p class="stock">Stock: {{ product.stock }} available</p>
+            <p class="description">{{ product.description }}</p>
+            
+            <div class="product-actions">
+                <a href="{% url 'rent:rent_product' product.id %}" class="btn-rent">Rent Now</a>
+                <a href="{% url 'add_to_cart' product.id %}" class="btn-cart">Add to Cart</a>
+            </div>
+            
+            <div class="actions">
+                {% if in_wishlist %}
+                    <form action="{% url 'remove_from_wishlist' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-wishlist active">Remove from Wishlist</button>
+                    </form>
+                {% else %}
+                    <form action="{% url 'add_to_wishlist' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-wishlist">Add to Wishlist</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

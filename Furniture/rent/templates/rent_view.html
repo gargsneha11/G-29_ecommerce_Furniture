@@ -1,0 +1,522 @@
+{% extends 'homepage.html' %}
+{% load static %}
+{% load rent_filters %}
+
+{% block title %}
+    <title>Rent Overview</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .rent-overview {
+            background-color: #f9f5f0;
+            padding: 60px 10%;
+            margin: 40px 0;
+        }
+
+        .rent-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .rent-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            color: #492e19;
+            margin-bottom: 10px;
+        }
+
+        .rent-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .date-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .date-filter button {
+            background-color: #f0e4d7;
+            color: #8b5e3c;
+            border: 2px solid #8b5e3c;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .date-filter button:hover {
+            background-color: #e0d4c7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .date-filter button.active {
+            background-color: #8b5e3c;
+            color: white;
+            border-color: #8b5e3c;
+        }
+
+        .date-filter button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .rent-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .rent-summary {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .rent-summary h3 {
+            font-size: 1.5em;
+            color: #492e19;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .summary-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #f0e4d7;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #492e19;
+            font-weight: bold;
+        }
+
+        .stat-value {
+            font-size: 1.2em;
+            color: #8b5e3c;
+            font-weight: bold;
+        }
+
+        .rent-details {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .rent-details h3 {
+            font-size: 1.5em;
+            color: #492e19;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-info h4 {
+            font-size: 1.1em;
+            color: #492e19;
+            margin-bottom: 5px;
+        }
+
+        .product-info p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .product-demand {
+            width: 40%;
+        }
+
+        .demand-label {
+            display: block;
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .demand-bar {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .demand-fill {
+            height: 100%;
+            background-color: #8b5e3c;
+            border-radius: 4px;
+        }
+
+        .renters-list {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .renters-list h3 {
+            font-size: 1.5em;
+            color: #492e19;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .renter-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .renter-item {
+            background-color: #f9f5f0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .renter-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .renter-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            background-color: #e0d4c7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #8b5e3c;
+            font-size: 1.5em;
+        }
+
+        .renter-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .renter-name {
+            font-weight: bold;
+            color: #492e19;
+        }
+
+        .renter-product {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .rent-dates {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .rent-price {
+            font-weight: bold;
+            color: #8b5e3c;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .rent-container {
+                flex-direction: column;
+            }
+            
+            .rent-header h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="rental-dashboard">
+        <!-- Period Selection -->
+        <div class="period-selector mb-4">
+            <h2 class="text-center mb-4">Rental Dashboard</h2>
+            <div class="btn-group d-flex justify-content-center" role="group">
+                <a href="?period=week" class="btn {% if period == 'week' %}btn-primary{% else %}btn-outline-primary{% endif %}">Week</a>
+                <a href="?period=month" class="btn {% if period == 'month' %}btn-primary{% else %}btn-outline-primary{% endif %}">Month</a>
+                <a href="?period=year" class="btn {% if period == 'year' %}btn-primary{% else %}btn-outline-primary{% endif %}">Year</a>
+            </div>
+            <p class="text-center text-muted mt-2">
+                Showing data from {{ start_date|date:"M d, Y" }} to {{ end_date|date:"M d, Y" }}
+            </p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Rentals</h5>
+                        <h2 class="text-primary">{{ total_rentals }}</h2>
+                        <p class="text-muted mb-0">This {{ period }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Total Revenue</h5>
+                        <h2 class="text-success">₹{{ total_revenue }}</h2>
+                        <p class="text-muted mb-0">This {{ period }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Active Rentals</h5>
+                        <h2 class="text-info">{{ active_rentals }}</h2>
+                        <p class="text-muted mb-0">Currently Rented</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card summary-card">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Upcoming Rentals</h5>
+                        <h2 class="text-warning">{{ upcoming_rentals }}</h2>
+                        <p class="text-muted mb-0">Next 7 Days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rental Status Distribution -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Rental Status Distribution</h5>
+                        <div class="status-bars">
+                            <div class="status-item">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>Active Rentals</span>
+                                    <span>{{ status_distribution.active }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-info" style="width: {{ status_distribution.active|divide:total_rentals|multiply:100 }}%"></div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>Completed Rentals</span>
+                                    <span>{{ status_distribution.completed }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" style="width: {{ status_distribution.completed|divide:total_rentals|multiply:100 }}%"></div>
+                                </div>
+                            </div>
+                            <div class="status-item">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>Upcoming Rentals</span>
+                                    <span>{{ status_distribution.upcoming }}</span>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" style="width: {{ status_distribution.upcoming|divide:total_rentals|multiply:100 }}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Average Rental Duration</h5>
+                        <div class="text-center">
+                            <h2 class="display-4 text-primary">{{ avg_duration }}</h2>
+                            <p class="text-muted">Days per rental</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Rented Products -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Top Rented Products</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Total Rentals</th>
+                                <th>Total Revenue</th>
+                                <th>Demand</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in top_rented_products %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if product.image_url %}
+                                        <img src="{{ product.image_url }}" alt="{{ product.product_name }}" class="product-thumbnail me-2">
+                                        {% endif %}
+                                        <span>{{ product.product_name }}</span>
+                                    </div>
+                                </td>
+                                <td>{{ product.total_rentals }}</td>
+                                <td>₹{{ product.total_revenue }}</td>
+                                <td>
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-primary" style="width: {{ product.demand_percentage }}%">
+                                            {{ product.demand_percentage|floatformat:1 }}%
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Rentals -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Recent Rentals</h5>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Renter</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rental in recent_rentals %}
+                            <tr>
+                                <td>{{ rental.rentable_product.product_name }}</td>
+                                <td>{{ rental.user.name }}</td>
+                                <td>{{ rental.start_date|date:"M d, Y" }}</td>
+                                <td>{{ rental.end_date|date:"M d, Y" }}</td>
+                                <td>₹{{ rental.total_price }}</td>
+                                <td>
+                                    {% if rental.end_date >= today %}
+                                    <span class="badge bg-success">Active</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Completed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .rental-dashboard {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .summary-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+    .summary-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .status-bars {
+        padding: 20px 0;
+    }
+
+    .status-item {
+        margin-bottom: 15px;
+    }
+
+    .progress {
+        height: 8px;
+        border-radius: 4px;
+    }
+
+    .product-thumbnail {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .badge {
+        padding: 8px 12px;
+        border-radius: 20px;
+    }
+</style>
+{% endblock %} 

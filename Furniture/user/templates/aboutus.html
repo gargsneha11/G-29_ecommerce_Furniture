@@ -1,0 +1,146 @@
+{% extends 'homepage.html' %}
+{% block title %}
+    <title>about us</title>
+{% endblock %}
+{% block style %}
+    <style>
+.about-us {
+    margin: 50px 10%;
+}
+
+.why-choose-us h2 {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 60px;
+    color: #492e19;
+    text-align: center;
+}
+.why-choose-us p {
+    font-size: 20px;
+    line-height: 1.6;
+    color: #555;
+    text-align: center;
+    margin-top: 20px;
+}
+.features {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+        .feature {
+            flex: 1;
+            min-width: 220px;
+            margin: 20px;
+            text-align: center;
+        }
+        .feature i {
+            font-size: 60px;
+            color: #8b5e3c;
+        }
+        .feature p {
+            margin-top: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #492e19;
+        }
+.team h2 {
+            font-size: 50px;
+            color: #492e19;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .team-members {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 50px;
+        }
+        .team-member {
+            flex: 1;
+            min-width: 250px;
+            margin: 20px;
+            text-align: center;
+        }
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #f0e5d8;
+        }
+        .team-member h4 {
+            margin-top: 15px;
+            font-size: 24px;
+            color: #492e19;
+        }
+        .team-member p {
+            color: #555;
+            font-size: 18px;
+            margin-top: 5px;
+        }
+
+    </style>
+{% endblock %}
+{% block content %}
+    
+<div class="about-us">
+    <!-- <div class="hero" style="margin: auto;">
+        <img alt="Modern Furniture in Living Room" height="600" src="./static/images/homepage.jpg" width="1200"/>
+    </div> -->
+
+    <div class="why-choose-us">
+        <h2>Who We Are</h2>
+        <p>At OMMER Furniture, we specialize in providing the highest quality furniture for every room in your home. Our mission is to deliver top-notch, affordable furniture options designed to make your home more comfortable and stylish.</p>
+        <p>We are passionate about curating a wide variety of furniture collections that cater to different tastes and preferences. Whether you’re looking for a cozy chair, a stylish sofa, or a functional center table, we have everything you need to make your home a better place.</p>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-truck"></i>
+            <p>Fast</p>
+            <span>DELIVERY</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-paint-brush"></i>
+            <p>Stylish</p>
+            <span>DESIGNS</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-cogs"></i>
+            <p>Durable</p>
+            <span>QUALITY</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-thumbs-up"></i>
+            <p>Customer</p>
+            <span>SATISFACTION</span>
+        </div>
+    </div>
+
+    <div class="team">
+        <h2>Our Team</h2>
+        <div class="team-members">
+            <div class="team-member">
+                <img src="https://via.placeholder.com/150" alt="Team Member" />
+                <h4>Sneha</h4>
+                
+            </div>
+            <div class="team-member">
+                <img src="https://via.placeholder.com/150" alt="Team Member" />
+                <h4>Pranjal</h4>
+              
+            </div>
+            <div class="team-member">
+                <img src="https://via.placeholder.com/150" alt="Team Member" />
+                <h4>Khushi</h4>
+              
+            </div>
+            <div class="team-member">
+                <img src="https://via.placeholder.com/150" alt="Team Member" />
+                <h4>Vaishnavi</h4>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

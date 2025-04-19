@@ -1,0 +1,170 @@
+{% extends 'homepage.html' %}
+{% block style %}
+<style>
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f0f8ff;
+    /* Replace this URL with your background image */
+    background-image: url('https://images4.alphacoders.com/260/260758.jpg');
+    
+    background-position: center;
+    padding: 20px;
+}
+
+/* Product Container Styling */
+.product-container {
+    display: flex;
+    justify-content: flex-start; /* Aligns the image to the left */
+    align-items: flex-start;
+    gap: 40px;
+    background-color: #fff;
+    
+    background-position: center;
+    background-size: cover;
+    padding: 50px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+  
+}
+
+/* Product Image Styling */
+.product-image img {
+    max-width: 500px; /* Reduced size */
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Details Styling */
+.product-details {
+    max-width: 600px;
+    text-align: left;
+    line-height: 1.6;
+}
+
+.product-details h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+}
+
+.product-description {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 20px;
+    font-family: 'Georgia', serif;
+}
+
+.product-price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ff5722;
+    margin-bottom: 20px;
+}
+
+.product-Quantity {
+    font-size: 1.1rem;
+    color: #777;
+    margin-bottom: 15px;
+}
+
+#color-options {
+    padding: 8px;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+#color-options:hover {
+    border-color: #ff5722;
+}
+
+.buy-now {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: #ff5722;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.buy-now:hover {
+    background-color: #e64a19;
+} 
+
+/* Responsive design adjustments */
+@media screen and (max-width: 768px) {
+    .product-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .product-details {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .product-details h1 {
+        font-size: 2rem;
+    }
+
+    .product-description {
+        font-size: 1rem;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="product-container">
+    <div class="product-image">
+        <img src="{{ product.image_url }}" alt="{{ product.name }}" height="400px" width="500px"> <!-- Reduced size -->
+    </div>
+    <div class="product-details">
+        <h1>{{ product.name }}</h1>
+        <p class="product-description">
+            {{ product.description }}
+        </p>
+        <p class="product-Quantity">
+            Quantity: {{ product.stock }}
+        </p>
+        <p class="product-price">Price: ₹{{ product.price }}</p>
+
+        
+        <br><br>
+        <form action="{% url 'add_to_cart' product.id%}" method="POST">
+            {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button class="buy-now" type="submit">
+                Add to cart
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

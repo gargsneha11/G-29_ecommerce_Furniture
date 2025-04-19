@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Rentable Product</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0eae0;
+            color: #4a372a;
+            margin: 0;
+            padding: 20px;
+            margin-top: 15vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .image-section,
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .image-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4a2e1d;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            background-color: #5a3e2b;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            margin: auto;
+        }
+
+        .submit-btn:hover {
+            background-color: #4a3323;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .submit-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Image Section -->
+    <div class="image-section">
+        <img src="https://tse3.mm.bing.net/th?id=OIP.NFgaQNZIAaGV6KG02JRYygHaIt&pid=Api" alt="Stylish furniture for rent">
+    </div>
+
+    <!-- Form Section -->
+    <div class="form-section">
+        <h2>Submit Rentable Product</h2>
+
+        <form action="{% url 'rent:submit_rent_product' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="image_url">Product Image URL:</label>
+                <input type="text" id="image_url" name="image_url" required>
+            </div>
+
+            <div class="form-group">
+                <label for="product_name">Product Name:</label>
+                <input type="text" id="product_name" name="product_name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="condition">Condition:</label>
+                <select id="condition" name="condition" required>
+                    <option value="">-- Select Condition --</option>
+                    <option value="new">New</option>
+                    <option value="used">Used</option>
+                    <option value="refurbished">Refurbished</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="price_per_day">Price Per Day (in USD):</label>
+                <input type="number" id="price_per_day" name="price_per_day" step="0.01" required>
+            </div>
+
+            <div class="form-group">
+                <button class="submit-btn" type="submit">Submit Rentable Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

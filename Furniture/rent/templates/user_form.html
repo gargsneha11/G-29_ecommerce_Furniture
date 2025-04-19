@@ -1,0 +1,187 @@
+{% extends 'homepage.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Rent {{ product.product_name }}</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    body {
+        background-color: #f8f9fa;  /* Light gray background */
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .form-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 25px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-details {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 10px;
+    }
+
+    .product-image {
+        flex: 0 0 300px;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .product-info h2 {
+        color: #333;
+        font-size: 2em;
+        margin-bottom: 15px;
+    }
+
+    .price-info {
+        background-color: #e9ecef;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+    }
+
+    .daily-price {
+        font-size: 1.2em;
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .total-price {
+        font-size: 1.4em;
+        color: #28a745;
+        font-weight: bold;
+        margin-top: 15px;
+        padding: 15px;
+        background-color: #e9ecef;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1em;
+    }
+
+    .submit-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        font-size: 1.1em;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s ease-in-out;
+        width: 100%;
+    }
+
+    .submit-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .error-message {
+        color: #dc3545;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="product-details">
+        <div class="product-image">
+            <img src="{{ product.image_url }}" alt="{{ product.product_name }}">
+        </div>
+        <div class="product-info">
+            <h2>{{ product.product_name }}</h2>
+            <div class="price-info">
+                <p>Daily Rental Price: <span class="daily-price">₹{{ product.price_per_day }}</span></p>
+                <p>Condition: {{ product.condition }}</p>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" id="rentForm">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_start_date">Start Date:</label>
+            {{ form.start_date }}
+            {% if form.start_date.errors %}
+                <div class="error-message">{{ form.start_date.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_end_date">End Date:</label>
+            {{ form.end_date }}
+            {% if form.end_date.errors %}
+                <div class="error-message">{{ form.end_date.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="total-price">
+            Total Price: ₹<span id="totalPrice">0</span>
+        </div>
+
+        <button type="submit" class="submit-btn">Confirm Rental</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const startDateInput = document.getElementById('id_start_date');
+        const endDateInput = document.getElementById('id_end_date');
+        const totalPriceSpan = document.getElementById('totalPrice');
+        const dailyPrice = {{ product.price_per_day }};
+
+        function calculateTotalPrice() {
+            const start = new Date(startDateInput.value);
+            const end = new Date(endDateInput.value);
+
+            if (start && end && start < end) {
+                const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                const total = days * dailyPrice;
+                totalPriceSpan.textContent = total.toFixed(2);
+            } else {
+                totalPriceSpan.textContent = '0';
+            }
+        }
+
+        startDateInput.addEventListener('change', calculateTotalPrice);
+        endDateInput.addEventListener('change', calculateTotalPrice);
+    });
+</script>
+{% endblock %}

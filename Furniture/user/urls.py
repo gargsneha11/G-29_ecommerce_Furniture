@@ -1,0 +1,36 @@
+from django.urls import path
+from .import views
+urlpatterns=[
+    path('home/',views.homepageFunction,name='home'),
+    path('',views.mainpageFunction,name='main'),
+    path('product/',views.productFunction ,name='all_products'),
+    path('about/',views.aboutFunction ,name='about'),
+    path('contact/',views.contactFunction ,name='contact'),
+    path('login/',views.login_view ,name='login'),
+    path('signup/',views.signup_view ,name='signup'),
+    path('seller/',views.sellerFunction ,name='seller'),
+    path('category/<str:category_slug>/', views.category_view, name='category'),
+    path('buyer/',views.buy_now_view ,name='buy_now'),
+    path('add_to_cart/<int:product_id>/',views.add_to_cart,name='add_to_cart'),
+    path('cart/', views.view_cart, name='cart'),
+    path('remove_from_cart/<int:product_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('update_quantity/<int:product_id>/', views.update_quantity, name='update_quantity'),
+    path('checkout/', views.checkout_view, name='checkout'),
+    path('order_place/', views.order_place, name='order_place'),
+    path('profile/', views.profile, name='profile'),
+    path('logout', views.logout_view, name='logout'),
+    path('list', views.list_view, name='list'),
+    path('seller/products/', views.product_list, name='seller_product_list'),
+    path('products/update/<int:id>/', views.update_product, name='update_product'),
+    path('products/delete/<int:id>/', views.delete_product, name='delete_product'),
+    path('search-ajax/', views.search_products, name='search_ajax'),
+    # Wishlist URLs
+    path('wishlist/', views.view_wishlist, name='wishlist'),
+    path('add_to_wishlist/<int:product_id>/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('remove_from_wishlist/<int:product_id>/', views.remove_from_wishlist, name='remove_from_wishlist'),
+    path('product/<int:product_id>/', views.product_detail, name='product_detail'),
+    # Wishlist Statistics for Sellers
+    path('wishlist-statistics/', views.wishlist_statistics, name='wishlist_statistics'),
+    path('sales-overview/', views.sales_overview, name='sales_overview'),
+    path('seller-dashboard/', views.seller_dashboard, name='seller_dashboard'),
+]

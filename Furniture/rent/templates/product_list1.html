@@ -1,0 +1,105 @@
+{% extends 'homepage.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Search and Filter Form -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <form method="GET" class="row g-3 align-items-end">
+                        <div class="col-md-6">
+                            <label for="search" class="form-label">Search Products</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-search text-muted"></i>
+                                </span>
+                                <input type="text" 
+                                       class="form-control border-start-0" 
+                                       id="search" 
+                                       name="search" 
+                                       value="{{ search_query }}"
+                                       placeholder="Search by name or description...">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" name="category">
+                                <option value="">All Categories</option>
+                                {% for category_value, category_name in categories %}
+                                <option value="{{ category_value }}" {% if category_value == selected_category %}selected{% endif %}>
+                                    {{ category_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-grid">
+                            <button type="submit" class="btn btn-dark">
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Listings -->
+    <h2 class="mb-4 fw-semibold text-center">Available Products for Rent</h2>
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm product-card border-0">
+                {% if product.image_url %}
+                <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.product_name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.product_name }}</h5>
+                    <p class="text-muted mb-2"><i class="fas fa-info-circle me-1"></i>{{ product.condition|capfirst }}</p>
+                    <p class="card-text">
+                        <span class="badge bg-success py-2 px-3">
+                            ${{ product.price_per_day }}<small class="text-light">per day</small> / day
+                        </span>
+                    </p>
+                    <a href="{% url 'rent:rent_product' product.id%}" class="btn btn-primary w-100">
+                        Rent This Item
+                    </a>
+
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                No products found matching your search criteria.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Styling -->
+<style>
+    .product-card {
+        transition: all 0.3s ease-in-out;
+        border-radius: 10px;
+    }
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    }
+    .card-img-top {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        height: 250px;
+        object-fit: cover;
+    }
+    .form-label {
+        font-weight: 600;
+    }
+    .input-group-text {
+        border: 1px solid #ced4da;
+    }
+</style>
+{% endblock %}

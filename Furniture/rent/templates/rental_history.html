@@ -1,0 +1,216 @@
+{% extends 'homepage.html' %}
+{% load static %}
+
+{% block title %}
+    <title>My Rental History</title>
+{% endblock %}
+
+{% block style %}
+<style>
+    .rental-history-container {
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+
+    .rental-history-header {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .rental-history-header h2 {
+        color: #333;
+        font-size: 2em;
+        margin-bottom: 10px;
+    }
+
+    .rental-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+
+    .rental-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .rental-content {
+        display: flex;
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .rental-image {
+        flex: 0 0 200px;
+    }
+
+    .rental-image img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .rental-details {
+        flex: 1;
+    }
+
+    .rental-details h3 {
+        color: #333;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+    }
+
+    .rental-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .info-item {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .info-label {
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+
+    .info-value {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .price-value {
+        color: #28a745;
+        font-weight: bold;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.9em;
+        font-weight: 500;
+    }
+
+    .status-active {
+        background-color: #d4edda;
+        color: #155724;
+    }
+
+    .status-completed {
+        background-color: #cce5ff;
+        color: #004085;
+    }
+
+    .status-cancelled {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+
+    .no-rentals {
+        text-align: center;
+        padding: 50px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .no-rentals i {
+        font-size: 3em;
+        color: #6c757d;
+        margin-bottom: 20px;
+    }
+
+    .no-rentals h3 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .no-rentals p {
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .browse-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .browse-btn:hover {
+        background-color: #0056b3;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="rental-history-container">
+    <div class="rental-history-header">
+        <h2>My Rental History</h2>
+        <p>Track all your furniture rentals in one place</p>
+    </div>
+
+    {% if rentals %}
+        {% for rental in rentals %}
+            <div class="rental-card">
+                <div class="rental-content">
+                    <div class="rental-image">
+                        <img src="{{ rental.rentable_product.image_url }}" alt="{{ rental.rentable_product.product_name }}">
+                    </div>
+                    <div class="rental-details">
+                        <h3>{{ rental.rentable_product.product_name }}</h3>
+                        <div class="rental-info">
+                            <div class="info-item">
+                                <div class="info-label">Start Date</div>
+                                <div class="info-value">{{ rental.start_date|date:"M d, Y" }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">End Date</div>
+                                <div class="info-value">{{ rental.end_date|date:"M d, Y" }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Daily Price</div>
+                                <div class="info-value">₹{{ rental.rentable_product.price_per_day }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">Total Price</div>
+                                <div class="info-value price-value">₹{{ rental.total_price }}</div>
+                            </div>
+                        </div>
+                        <div class="rental-status">
+                            {% if rental.end_date > today %}
+                                <span class="status-badge status-active">Active</span>
+                            {% else %}
+                                <span class="status-badge status-completed">Completed</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="no-rentals">
+            <i class="fas fa-box-open"></i>
+            <h3>No Rentals Yet</h3>
+            <p>You haven't rented any furniture yet. Start exploring our collection!</p>
+            <a href="{% url 'rent:product_list1' %}" class="browse-btn">
+                <i class="fas fa-search me-2"></i>Browse Products
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

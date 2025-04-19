@@ -1,0 +1,218 @@
+{% extends 'homepage.html' %}
+{% block title %}
+    <title>
+        Contact
+    </title>
+{% endblock %}
+{% block style %}
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #F4EFEA;
+    color: #333;
+    
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  #contact-container {
+    width: 100%;
+    background: #DDB892;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    margin: auto;
+    margin-top: 150px;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1200px;
+  }
+
+  #contact-container header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  #contact-container h1 {
+    font-size: 2.5em;
+    color: #9C6644;
+    margin: 0;
+  }
+
+  #form-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    gap: 20px;
+  }
+
+  #form-left, #form-right {
+    flex: 1;
+    min-width: 280px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #444;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+  }
+
+  input:focus, textarea:focus {
+    border-color: #9C6644;
+  }
+
+  textarea {
+    resize: none;
+    height: 100px;
+  }
+
+  button {
+    width: 100%;
+    background: #9C6644;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background: #6E4C33;
+  }
+
+  #form-right {
+    background: #ffe5ca;
+    padding: 20px;
+    border-radius: 12px;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #form-right h3 {
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    color: #9C6644;
+  }
+
+  #form-right p {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  #form-right strong {
+    color: #9C6644;
+  }
+
+  .status-message {
+    margin-top: 10px;
+    color: green;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    #form-container {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    #form-left, #form-right {
+      width: 100%;
+    }
+  }
+    </style>
+{% endblock %}
+{% block content %}
+<header>
+  <h1>Contact Us</h1>
+</header>
+
+<div id="form-container">
+  <div id="form-left">
+    <form id="contact-form">
+      <div class="form-group">
+        <label for="full-name">Full Name</label>
+        <input type="text" id="full-name" name="full-name" placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label for="phone-number">Phone Number</label>
+        <input type="tel" id="phone-number" name="phone-number" placeholder="Enter your phone number">
+      </div>
+      <div class="form-group">
+        <label for="email">Email ID</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email">
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write your message here"></textarea>
+      </div>
+      <div class="form-group">
+        <button type="submit">Submit</button>
+      </div>
+      <p class="status-message" id="status-message"></p>
+    </form>
+  </div>
+
+  <div id="form-right">
+    <h3>Get to know each other</h3>
+    <p><strong>M:</strong> 987XXXXXXX</p>
+    <p><strong>Email:</strong> donate@gmail.com</p>
+    <p><strong>Address:</strong> 1234 Elm Street, Your City, Country</p>
+  </div>
+</div>
+</div>
+<script>
+const form = document.getElementById("contact-form");
+const statusMessage = document.getElementById("status-message");
+
+
+form.addEventListener("submit", function (event) {
+  event.preventDefault(); 
+
+ 
+  const fullName = document.getElementById("full-name").value;
+  const phoneNumber = document.getElementById("phone-number").value;
+  const email = document.getElementById("email").value;
+  const message = document.getElementById("message").value;
+
+ 
+  if (!fullName || !phoneNumber || !email || !message) {
+    alert("Please fill in all the fields before submitting!");
+    return;
+  }
+
+  alert("Message sent successfully!");
+
+  
+  form.reset();
+
+  statusMessage.textContent = "Your message has been sent successfully!";
+  statusMessage.style.color = "green";
+});
+</script>
+{% endblock %}

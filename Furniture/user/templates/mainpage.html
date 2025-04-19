@@ -1,0 +1,1102 @@
+{% extends 'homepage.html' %}
+{%load static%}
+{% block title %}
+    <title>Main page</title>
+{% endblock %}
+{% block style %}
+    <style>
+            body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+       
+        .hero {
+            text-align: center;
+            background-color: rgb(238, 232, 225);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero img {
+            width: 100%;
+            height: auto;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+        .hero:hover img {
+            opacity: 0.9;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+        .seller-cta {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .seller-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: white;
+        }
+        .seller-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .btn-sell, .btn-rent {
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: none;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .btn-sell {
+            background-color: #8b5e3c;
+            color: white;
+        }
+        .btn-rent {
+            background-color: white;
+            color: #8b5e3c;
+        }
+        .btn-sell:hover, .btn-rent:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .btn-sell:active, .btn-rent:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .why-choose-us {
+            margin: 50px 0;
+        }
+        .why-choose-us h2 {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 80px;
+            color: #492e19;
+        }
+        .features {
+            display: flex;
+            width: 80vw;
+            margin: auto;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+            /* margin: 20px 0; */
+        }
+        .feature {
+            flex: 1;
+            min-width: 230px;
+            margin: 10px;
+        }
+        .feature i {
+            font-size: 70px;
+            color: #8b5e3c;
+        }
+        .feature p {
+            margin: 5px 0;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .feature span {
+            font-size: 18px;
+            color: #555;
+        }
+        .categories {
+            margin: 80px 0;
+        }
+        .categories h3 {
+            font-size: 54px;
+            font-weight: bold;
+            color: #492e19;
+        }
+        .category-list {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        .category {
+            flex: 1;
+            min-width: 150px;
+            margin: 10px;
+            text-align: center;
+        }
+        .category img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background-color: #f0e5d8;
+        }
+        .category p {
+            margin: 10px 0 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+
+        .main-content {
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+        .main-content .text-overlay {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            transform: translate(-10%, -20%);
+            color: #ffffff;
+            text-align: left;
+        }
+        .main-content .text-overlay h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            margin: 0;
+        }
+        .main-content .text-overlay p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .main-content .text-overlay .buttons {
+            margin-top: 20px;
+        }
+        .main-content .text-overlay .buttons button {
+            background-color: #a67c52;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .main-content .text-overlay .buttons button:hover {
+            background-color: #8b5e3c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .main-content .text-overlay .buttons button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .main-content .text-overlay .buttons button.secondary {
+            background-color: #f0e4d7;
+            color: #a67c52;
+        }
+        .main-content .text-overlay .buttons button.secondary:hover {
+            background-color: #e0d4c7;
+            color: #8b5e3c;
+        }
+        .featured-products {
+            text-align: center;
+            padding: 20px;
+            background-color:rgb(238, 232, 225);
+        }
+        .featured-products h2 {
+            font-size: 50px;
+            color: #8b5e3c;
+            margin-bottom: 60px;
+            margin-right: -20px;
+        }
+        .featured-products .products {
+            display: flex;
+            justify-content: center;
+            /* justify-content: space-between; */
+            gap: 150px;
+            flex-wrap: wrap;
+        }
+        .featured-products .products .product {
+            width: 350px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .featured-products .products .product img {
+            width: 100%;
+            height: auto;
+        }
+
+        .category img, .product img {
+    transition: transform 0.3s ease;
+    }
+
+        .category img:hover, .product img:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+    }
+            /* reveiws css */
+            .reviews {
+    background-color: #f0e4d7;
+    padding: 40px 10%;
+    text-align: center;
+    /* display: flex; */
+}
+
+.reviews h2 {
+    font-size: 60px;
+    color: #492e19;
+    margin-bottom: 30px;
+}
+
+.review {
+    background-color: white;
+    border-radius: 10px;
+    padding:40px;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.reveiewbox{
+    display: flex;
+}
+
+.review-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.reviewer-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+}
+
+.reviewer-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #8b5e3c;
+}
+
+.review-rating {
+    font-size: 20px;
+    color: #f5d200;
+}
+
+.review-comment {
+    font-size: 18px;
+    color: #555;
+    margin-top: 10px;
+}
+footer {
+    background-color: #8b5e3c;
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+footer .footer-logo h3 {
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+footer .footer-links a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+footer .footer-links a:hover {
+    text-decoration: underline;
+    color: #f0e4d7;
+}
+footer .footer-social a {
+    color: white;
+    font-size: 24px;
+    margin: 0 15px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+footer .footer-social a:hover {
+    color: #f0e4d7;
+    transform: translateY(-3px);
+}
+footer .footer-bottom {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #f0e4d7;
+}
+/* .carousel-item>img {
+height: 700px;
+} */
+.carousel-item > img {
+    max-height: 700px;
+    width: 100%;
+    object-fit: cover;
+}
+
+
+@media (max-width: 768px) {
+    .reviews {
+        padding: 40px 5%;
+    }
+
+    .reviews h2 {
+        font-size: 30px;
+    }
+
+    .review-comment {
+        font-size: 16px;
+    }
+   
+    footer .footer-logo h3 {
+        font-size: 30px;
+    }
+    footer .footer-links a {
+        font-size: 16px;
+        margin: 0 10px;
+    }
+    footer .footer-social a {
+        font-size: 20px;
+    }
+    
+
+}
+
+        @media (max-width: 768px) {
+            .navbar .menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .featured-products .products {
+                flex-direction: column;
+                align-items: center;
+            }
+            .main-content {
+                flex-direction: column;
+            }
+            .features, .category-list {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+
+
+.seller-stats {
+    background-color: #f0e4d7;
+    padding: 40px 10%;
+    text-align: center;
+}
+
+.seller-stats h2 {
+    font-size: 60px;
+    color: #492e19;
+    margin-bottom: 30px;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.stat-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    flex: 1;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    font-size: 40px;
+    color: #8b5e3c;
+    margin-bottom: 20px;
+}
+
+.stat-info h3 {
+    font-size: 24px;
+    color: #492e19;
+    margin-bottom: 15px;
+}
+
+.stat-info p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+    min-height: 40px;
+}
+
+.stat-btn {
+    display: inline-block;
+    background: #8b5e3c;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    cursor: pointer;
+}
+
+.stat-btn:hover {
+    background: #6d4a2e;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.stat-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .stats-container {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .stat-card {
+        width: 100%;
+    }
+    
+    .seller-stats h2 {
+        font-size: 30px;
+    }
+}
+
+.sales-overview {
+    background-color: #f9f5f0;
+    padding: 60px 10%;
+    margin: 40px 0;
+}
+
+.sales-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.sales-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3em;
+    color: #492e19;
+    margin-bottom: 10px;
+}
+
+.sales-header p {
+    font-size: 1.2em;
+    color: #666;
+}
+
+.date-filter {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.date-filter button {
+    background-color: #f0e4d7;
+    color: #8b5e3c;
+    border: 2px solid #8b5e3c;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.date-filter button:hover {
+    background-color: #e0d4c7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.date-filter button.active {
+    background-color: #8b5e3c;
+    color: white;
+    border-color: #8b5e3c;
+}
+
+.date-filter button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.sales-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.sales-chart {
+    flex: 1;
+    min-width: 300px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.sales-chart h3 {
+    font-size: 1.5em;
+    color: #492e19;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 200px;
+    margin-bottom: 20px;
+}
+
+.chart-bar {
+    width: 12%;
+    background-color: #8b5e3c;
+    border-radius: 5px 5px 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative;
+    transition: height 0.3s ease;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -25px;
+    font-size: 0.8em;
+    color: #666;
+}
+
+.bar-value {
+    position: absolute;
+    top: -20px;
+    font-size: 0.8em;
+    color: #8b5e3c;
+    font-weight: bold;
+}
+
+.chart-summary {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.summary-item {
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+    padding: 10px;
+    background-color: #f0e4d7;
+    border-radius: 5px;
+}
+
+.summary-label {
+    display: block;
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.summary-value {
+    display: block;
+    font-size: 1.2em;
+    color: #492e19;
+    font-weight: bold;
+}
+
+.sales-details {
+    flex: 1;
+    min-width: 300px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.sales-details h3 {
+    font-size: 1.5em;
+    color: #492e19;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.product-info h4 {
+    font-size: 1.1em;
+    color: #492e19;
+    margin-bottom: 5px;
+}
+
+.product-info p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+.product-demand {
+    width: 40%;
+}
+
+.demand-label {
+    display: block;
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.demand-bar {
+    height: 8px;
+    background-color: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.demand-fill {
+    height: 100%;
+    background-color: #8b5e3c;
+    border-radius: 4px;
+}
+
+.seller-reviews {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.seller-reviews h3 {
+    font-size: 1.5em;
+    color: #492e19;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.review-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.seller-review {
+    background-color: #f9f5f0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.seller-review .review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.seller-review .reviewer-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.seller-review .reviewer-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.seller-review .reviewer-name {
+    font-weight: bold;
+    color: #492e19;
+}
+
+.seller-review .review-date {
+    font-size: 0.8em;
+    color: #666;
+}
+
+.seller-review .review-rating {
+    color: #f5d200;
+    font-size: 1.2em;
+}
+
+.seller-review .review-comment {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .sales-container {
+        flex-direction: column;
+    }
+    
+    .chart-container {
+        height: 150px;
+    }
+    
+    .chart-bar {
+        width: 11%;
+    }
+    
+    .sales-header h2 {
+        font-size: 2em;
+    }
+}
+    </style>
+{% endblock %}
+{% block content %}
+    <div class="hero">
+        <div class="hero-overlay"></div>
+        <img alt="Living room with modern furniture, including a sofa, coffee table, and shelves with decorative items" height="600" src="{% static 'images/main.png'%}" width="1200"/>
+        
+        {% if request.user.is_authenticated and request.user.role == "seller" %}
+        <div class="seller-cta">
+            <h2>List Your Products With Us</h2>
+            <div class="seller-buttons">
+                <a href="{% url 'seller' %}" class="btn-sell">Sell</a>
+                <a href="{% url 'rent:rent' %}" class="btn-rent">Rent</a>
+                <!-- <a href="{% url 'rent:product_list1' %}" class="btn-rent">List</a> -->
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+<br><br><br>
+<div class="why-choose-us">
+    <h2>
+     why choose us
+    </h2>
+    <div class="features">
+     <div class="feature">
+      <i class="fas fa-shipping-fast">
+      </i>
+      <p>
+       FREE
+      </p>
+      <span>
+       SHIPPING
+      </span>
+     </div>
+     <div class="feature">
+      <i class="fas fa-calculator">
+      </i>
+      <p>
+       NO COST
+      </p>
+      <span>
+       EMI
+      </span>
+     </div>
+     <div class="feature">
+      <i class="fas fa-thumbs-up">
+      </i>
+      <p>
+       52,000+
+      </p>
+      <span>
+       SATISFIED CUSTOMERS
+      </span>
+     </div>
+     <div class="feature">
+      <i class="fas fa-lock">
+      </i>
+      <p>
+       SECURE
+      </p>
+      <span>
+       PAYMENTS
+      </span>
+     </div>
+     <div class="feature">
+      <i class="fas fa-undo">
+      </i>
+      <p>
+       EASY
+      </p>
+      <span>
+       RETURNS
+      </span>
+     </div>
+    </div>
+   </div>
+
+
+   
+   <br><br><br>
+
+{% if request.user.is_authenticated and request.user.role == "seller" %}
+<div class="sales-overview">
+    <div class="sales-header">
+        <h2>Sales Overview</h2>
+        <p>Track your daily sales performance and customer feedback</p>
+    </div>
+    
+    <div class="date-filter">
+        <button class="active" data-period="week">This Week</button>
+        <button data-period="month">This Month</button>
+        <button data-period="year">This Year</button>
+    </div>
+    
+    <div class="sales-container">
+        <div class="sales-chart">
+            <h3>Daily Sales</h3>
+            <div class="chart-container">
+                {% if daily_sales %}
+                    {% for day, count in daily_sales.items %}
+                        <div class="chart-bar" style="height: {{ count.percentage }}%;">
+                            <span class="bar-label">{{ day }}</span>
+                            <span class="bar-value">{{ count.value }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-data">No sales data available for the selected period</div>
+                {% endif %}
+            </div>
+            <div class="chart-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Total Sales ({{ period }})</span>
+                    <span class="summary-value">{{ total_sales }} items</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Average Daily</span>
+                    <span class="summary-value">{{ avg_daily_sales }} items</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Best Day</span>
+                    <span class="summary-value">{{ best_day }} ({{ best_day_sales }})</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sales-details">
+            <h3>Top Selling Products</h3>
+            <div class="product-list">
+                {% if top_products %}
+                    {% for product in top_products %}
+                        <div class="product-item">
+                            <div class="product-info">
+                                <h4>{{ product.product__name }}</h4>
+                                <p>Sold: {{ product.sold_count }} units this {{ period }}</p>
+                            </div>
+                            <div class="product-demand">
+                                <span class="demand-label">Demand</span>
+                                <div class="demand-bar">
+                                    <div class="demand-fill" style="width: {{ product.demand_percentage }}%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-data">No product sales data available</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="seller-reviews">
+        <h3>Customer Feedback</h3>
+        <div class="review-container">
+            {% if customer_reviews %}
+                {% for review in customer_reviews %}
+                    <div class="seller-review">
+                        <div class="review-header">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="{{ review.name }}" class="reviewer-photo">
+                            <div class="reviewer-details">
+                                <span class="reviewer-name">{{ review.name }}</span>
+                                <span class="review-date">Purchased: {{ review.product }}</span>
+                            </div>
+                            <span class="review-rating">
+                                {% for i in "12345"|make_list %}
+                                    {% if forloop.counter <= review.rating %}
+                                        ★
+                                    {% else %}
+                                        ☆
+                                    {% endif %}
+                                {% endfor %}
+                            </span>
+                        </div>
+                        <p class="review-comment">{{ review.comment }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">No customer reviews available</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateFilterButtons = document.querySelectorAll('.date-filter button');
+        
+        dateFilterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                dateFilterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get the selected period
+                const period = this.getAttribute('data-period');
+                
+                // Redirect to the same page with the period parameter
+                window.location.href = `{% url 'main' %}?period=${period}`;
+            });
+        });
+    });
+</script>
+{% else %}
+<div class="categories">
+    <h3>
+     Popular Categories
+    </h3>
+    <br><br><br>
+    <div class="category-list">
+        <div class="category">
+            <a href="{% url 'category' 'office-chairs'%}">
+                <img alt="Comfortable Chair" height="100" src="https://storage.googleapis.com/a1aa/image/TDNu3y8TyV8m8hFsDMJoOUSeDTOgsb4SlBxu5Ww7mXA.jpg" width="100"/>
+            </a>
+            <p>Comfortable Chairs</p>
+        </div>
+        <div class="category">
+            <a href="{% url 'category' 'side tables'%}">
+                <img alt="Center Table" height="100" src="https://storage.googleapis.com/a1aa/image/CQTtmpD_Oaf5urXznwQn7o_a2CxPmvKUPSPyMybviVY.jpg" width="100"/>
+            </a>
+            <p>Center Tables</p>
+        </div>
+        <div class="category">
+            <a href="{% url 'category' 'others'%}">
+                <img alt="Kids Furniture" height="100" src="https://storage.googleapis.com/a1aa/image/5njsB9MXUhKtF_aPN-FhSHQHh4qcifDX94NA0BWuctM.jpg" width="100"/>
+            </a>
+            <p>Kids Furniture</p>
+        </div>
+        <div class="category">
+            <a href="{% url 'category' 'desks'%}">
+                <img alt="Outdoor Picnic Table" height="100" src="https://storage.googleapis.com/a1aa/image/wRsAprQQzkOqh0HBQMa6mRuALgP98JWqtJCdcwghfKE.jpg" width="100"/>
+            </a>
+            <p>Outdoor Picnic Tables</p>
+        </div>
+        <div class="category">
+            <a href="{% url 'category' 'bookshelves'%}">
+                <img alt="Idol" height="100" src="https://storage.googleapis.com/a1aa/image/KyObosWPgvb9YUMYZ9K7UkGx7tw63JNbm4d5TJsmuuM.jpg" width="100"/>
+            </a>
+            <p>Idols</p>
+        </div>
+        <div class="category">
+            <a href="{% url 'category' 'others'%}">
+                <img alt="Water Fountain" height="100" src="https://storage.googleapis.com/a1aa/image/RoRA2bjkliKdG7Rs_6KOg63gyQA4PN956bPieEFxquI.jpg" width="100"/>
+            </a>
+            <p>Water Fountains</p>
+        </div>
+    </div>
+   </div>
+<div class="reviews">
+    <br><br><br><br>
+    <h2>Customer Reviews</h2>
+    <br><br><br><br>
+    <div class="reveiewbox">
+    <div class="review">
+        <div class="review-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="John Doe" class="reviewer-photo">
+            <span class="reviewer-name">John Doe</span>
+            <span class="review-rating">★★★★★</span>
+        </div>
+        <p class="review-comment">"Amazing furniture! The quality is top-notch and the design is exactly what I was looking for. Highly recommend."</p>
+    </div>
+    <div class="review">
+        <div class="review-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Jane Smith" class="reviewer-photo">
+            <span class="reviewer-name">Jane Smith</span>
+            <span class="review-rating">★★★★☆</span>
+        </div>
+        <p class="review-comment">"Great value for the price. The chairs are comfortable, but the delivery was a little delayed. Still, I'm satisfied with the purchase."</p>
+    </div>
+    <div class="review">
+        <div class="review-header">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Sarah Lee" class="reviewer-photo">
+            <span class="reviewer-name">Sarah Lee</span>
+            <span class="review-rating">★★★★★</span>
+        </div>
+        <p class="review-comment">"The dining table set is beautiful! The wood quality is excellent, and it matches my living room perfectly. I am extremely happy."</p>
+    </div>
+    </div>
+    <br><br><br><br>
+</div>
+{% endif %}
+
+<footer>
+    <div class="footer-content">
+        <div class="footer-logo">
+            <h3>FurniStyle</h3>
+        </div>
+        <div class="footer-links">
+            <a href="#">Home</a>
+            <a href="#">Products</a>
+            <a href="#">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Sale</a>
+        </div>
+        <div class="footer-social">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 FurniStyle | All Rights Reserved</p>
+        </div>
+    </div>
+</footer>
+{% endblock %}

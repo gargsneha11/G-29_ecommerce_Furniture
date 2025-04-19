@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f3f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .checkout-wrapper {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 40px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #5c4033;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #3e2f2f;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            font-size: 1rem;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f6f2;
+            box-sizing: border-box;
+            transition: border 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #8b5e3c;
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #5c4033;
+            text-align: right;
+            margin-top: 30px;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: #5c4033;
+            color: #fff;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #734c30;
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        @media (max-width: 768px) {
+            .checkout-wrapper {
+                margin: 30px 20px;
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .total-amount {
+                font-size: 1.3rem;
+            }
+
+            .btn-submit {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-wrapper">
+        <h1>Checkout</h1>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="section">
+                <label for="address">Delivery Address</label>
+                <textarea name="address" id="address" rows="4" placeholder="Enter your full delivery address" required></textarea>
+            </div>
+
+            <div class="section">
+                <label for="payment_method">Payment Method</label>
+                <select name="payment_method" id="payment_method" required>
+                    <option value="">-- Select Payment Method --</option>
+                    <option value="cod">Cash on Delivery</option>
+                    <option value="card">Credit/Debit Card</option>
+                    <option value="upi">UPI</option>
+                    <option value="netbanking">Net Banking</option>
+                </select>
+            </div>
+
+            <div class="total-amount">
+                Total to Pay: ₹{{ total }}
+            </div>
+
+            <button 
+            type="submit" class="btn-submit">Confirm & Place Order</a></button>
+        </form>
+
+        <div class="footer-note">
+            Secure payment · Fast delivery · 24/7 support
+        </div>
+    </div>
+</body>
+</html>

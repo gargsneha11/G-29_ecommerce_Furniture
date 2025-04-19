@@ -1,0 +1,422 @@
+{% extends 'homepage.html' %}
+{% load static %}
+
+{% block title %}
+    <title>Sales Overview - FurniStyle</title>
+{% endblock %}
+
+{% block style %}
+    <style>
+        .sales-overview {
+            background-color: #f9f5f0;
+            padding: 60px 10%;
+            margin: 40px 0;
+        }
+
+        .sales-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .sales-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            color: #492e19;
+            margin-bottom: 10px;
+        }
+
+        .sales-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .sales-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .sales-chart {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sales-chart h3 {
+            font-size: 1.5em;
+            color: #492e19;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .chart-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        .chart-bar {
+            width: 12%;
+            background-color: #8b5e3c;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+            transition: height 0.3s ease;
+        }
+
+        .bar-label {
+            position: absolute;
+            bottom: -25px;
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -20px;
+            font-size: 0.8em;
+            color: #8b5e3c;
+            font-weight: bold;
+        }
+
+        .chart-summary {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .summary-item {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            padding: 10px;
+            background-color: #f0e4d7;
+            border-radius: 5px;
+        }
+
+        .summary-label {
+            display: block;
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .summary-value {
+            display: block;
+            font-size: 1.2em;
+            color: #492e19;
+            font-weight: bold;
+        }
+
+        .sales-details {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .sales-details h3 {
+            font-size: 1.5em;
+            color: #492e19;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .product-info h4 {
+            font-size: 1.1em;
+            color: #492e19;
+            margin-bottom: 5px;
+        }
+
+        .product-info p {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .product-demand {
+            width: 40%;
+        }
+
+        .demand-label {
+            display: block;
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .demand-bar {
+            height: 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .demand-fill {
+            height: 100%;
+            background-color: #8b5e3c;
+            border-radius: 4px;
+        }
+
+        .seller-reviews {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .seller-reviews h3 {
+            font-size: 1.5em;
+            color: #492e19;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .review-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .seller-review {
+            background-color: #f9f5f0;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .seller-review .review-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .seller-review .reviewer-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .seller-review .reviewer-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .seller-review .reviewer-name {
+            font-weight: bold;
+            color: #492e19;
+        }
+
+        .seller-review .review-date {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .seller-review .review-rating {
+            color: #f5d200;
+            font-size: 1.2em;
+        }
+
+        .seller-review .review-comment {
+            font-size: 0.95em;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .date-filter {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .date-filter button {
+            background-color: #f0e4d7;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #492e19;
+            transition: all 0.3s ease;
+        }
+
+        .date-filter button.active {
+            background-color: #8b5e3c;
+            color: white;
+        }
+
+        .date-filter button:hover {
+            background-color: #8b5e3c;
+            color: white;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .sales-container {
+                flex-direction: column;
+            }
+            
+            .chart-container {
+                height: 150px;
+            }
+            
+            .chart-bar {
+                width: 11%;
+            }
+            
+            .sales-header h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="sales-overview">
+    <div class="sales-header">
+        <h2>Sales Overview</h2>
+        <p>Track your daily sales performance and customer feedback</p>
+    </div>
+    
+    <div class="date-filter">
+        <button class="active" data-period="week">This Week</button>
+        <button data-period="month">This Month</button>
+        <button data-period="year">This Year</button>
+    </div>
+    
+    <div class="sales-container">
+        <div class="sales-chart">
+            <h3>Daily Sales</h3>
+            <div class="chart-container">
+                {% if daily_sales %}
+                    {% for day, count in daily_sales.items %}
+                        <div class="chart-bar" style="height: {{ count.percentage }}%;">
+                            <span class="bar-label">{{ day }}</span>
+                            <span class="bar-value">{{ count.value }}</span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-data">No sales data available for the selected period</div>
+                {% endif %}
+            </div>
+            <div class="chart-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Total Sales ({{ period }})</span>
+                    <span class="summary-value">{{ total_sales }} items</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Average Daily</span>
+                    <span class="summary-value">{{ avg_daily_sales }} items</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Best Day</span>
+                    <span class="summary-value">{{ best_day }} ({{ best_day_sales }})</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="sales-details">
+            <h3>Top Selling Products</h3>
+            <div class="product-list">
+                {% if top_products %}
+                    {% for product in top_products %}
+                        <div class="product-item">
+                            <div class="product-info">
+                                <h4>{{ product.name }}</h4>
+                                <p>Sold: {{ product.sold_count }} units this {{ period }}</p>
+                            </div>
+                            <div class="product-demand">
+                                <span class="demand-label">Demand</span>
+                                <div class="demand-bar">
+                                    <div class="demand-fill" style="width: {{ product.demand_percentage }}% ;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-data">No product sales data available</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="seller-reviews">
+        <h3>Customer Feedback</h3>
+        <div class="review-container">
+            {% if customer_reviews %}
+                {% for review in customer_reviews %}
+                    <div class="seller-review">
+                        <div class="review-header">
+                            <img src="{{ review.customer_photo }}" alt="{{ review.customer_name }}" class="reviewer-photo">
+                            <div class="reviewer-details">
+                                <span class="reviewer-name">{{ review.customer_name }}</span>
+                                <span class="review-date">Purchased: {{ review.product_name }}</span>
+                            </div>
+                            <span class="review-rating">{{ review.rating }}</span>
+                        </div>
+                        <p class="review-comment">{{ review.comment }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-data">No customer reviews available</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateFilterButtons = document.querySelectorAll('.date-filter button');
+        
+        dateFilterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                dateFilterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Get the selected period
+                const period = this.getAttribute('data-period');
+                
+                // Redirect to the same page with the period parameter
+                window.location.href = `{% url 'sales_overview' %}?period=${period}`;
+            });
+        });
+    });
+</script>
+{% endblock %}

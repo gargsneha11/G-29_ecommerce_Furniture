@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Success</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfaf6;
+            color: #3e2f2f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .container:hover {
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .checkmark {
+            font-size: 90px;
+            color: #28a745;
+            margin-bottom: 25px;
+            animation: pop 0.4s ease-out;
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        h1 {
+            font-size: 2.7rem;
+            color: #5c4033;
+            margin-bottom: 18px;
+        }
+
+        .message {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: #3e2f2f;
+        }
+
+        .details {
+            font-size: 1rem;
+            color: #6b4c3b;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .btn-home {
+            background-color: #5c4033;
+            color: #ffffff;
+            padding: 14px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(92, 64, 51, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-home:hover {
+            background-color: #7a5642;
+            box-shadow: 0 12px 30px rgba(92, 64, 51, 0.4);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2.1rem;
+            }
+
+            .message, .details {
+                font-size: 1rem;
+            }
+
+            .btn-home {
+                width: 100%;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="checkmark">✅</div>
+        <h1>Order Confirmed!</h1>
+        <p class="message">Thanks for shopping with us! Your order was placed successfully.</p>
+        <p class="details">We've sent a confirmation email with your order details. Expect delivery soon at your provided address.</p>
+        <a href="{% url 'all_products' %}" class="btn-home">Continue Shopping</a>
+    </div>
+</body>
+</html>
